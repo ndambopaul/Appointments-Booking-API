@@ -38,10 +38,38 @@ const getBookingById = async(req, res) => {
         console.log({ error: error.message });
         return res.status(500).send({ error: error.message })
     }
+};
+
+const updateBooking = async(req, res) => {
+    const { body, params: { id } } = req
+
+    try {
+        const booking = await Booking.findByIdAndUpdate(id, { ...body }, { new: true });
+        if(!booking) return res.status(404).send({ error: `Booking with id: ${id} not found!!` })
+        res.send({ booking }).status(200)
+    } catch (error) {
+        console.log({ error: error.message });
+        return res.status(500).send({ error: error.message })
+    }
+}
+
+const deleteBooking  = async(req, res) => {
+    const { id } = req.params;
+
+    try {
+        const booking = await Booking.findByIdAndDelete(id)
+        if(!booking) return res.status(404).send({ error: `Booking with id: ${id} not found!!` })
+        res.send({ message: `Booking with id: ${id} deleted successfully` })
+    } catch (error) {
+        console.log({ error: error.message });
+        return res.status(500).send({ error: error.message })
+    }
 }
 
 module.exports = {
     getBookings,
     getBookingById,
-    createBooking
+    createBooking,
+    updateBooking,
+    deleteBooking
 }
