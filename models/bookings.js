@@ -19,25 +19,5 @@ const BookingSchema = new mongoose.Schema({
     }
 });
 
-const StudentsSchema = new mongoose.Schema({
-    booking: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Booking"
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    }
-});
 
-const Booking = mongoose.model("Booking", BookingSchema);
-const Student = mongoose.model("Student", StudentsSchema);
-
-module.exports = {
-    Booking,
-    Student
-}
+module.exports = mongoose.model("Booking", BookingSchema)
