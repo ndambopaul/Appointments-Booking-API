@@ -20,6 +20,7 @@ const { verifyToken } = require("./middleware/Authenticate");
 // Routes
 const authRoutes = require("./routes/auth");
 const slotRoutes = require("./routes/slots");
+const bookingRoutes = require("./routes/bookings")
 
 app.get("/", (req, res) => {
     res.send({ message: "Server is running" }).status(200)
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/slots", verifyToken, slotRoutes);
+app.use("/bookings", verifyToken, bookingRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on: http://127.0.0.1:${PORT}`)
