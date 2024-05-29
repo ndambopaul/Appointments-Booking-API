@@ -1,7 +1,7 @@
 const Booking = require("../models/bookings");
 
 const getBookings = async(req, res) => {
-    const bookings = await Booking.find({})
+    const bookings = await Booking.find({}).populate("creator")
     res.send({count: bookings.length, records: bookings})
 };
 
