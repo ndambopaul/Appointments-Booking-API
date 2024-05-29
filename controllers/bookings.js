@@ -33,7 +33,7 @@ const getBookingById = async(req, res) => {
     try {
         const booking = await Booking.findById({"_id": id})
         if(!booking) return res.status(404).send({ error: `Booking with id: ${id} not found` })
-        res.send({ booking }).status(200)
+        res.send(booking).status(200)
     } catch (error) {
         console.log({ error: error.message });
         return res.status(500).send({ error: error.message })
