@@ -1,4 +1,5 @@
 const Booking = require("../models/bookings");
+const Slot = require("../models/slots");
 
 const getBookings = async(req, res) => {
     const bookings = await Booking.find({}).populate("creator")
@@ -6,18 +7,26 @@ const getBookings = async(req, res) => {
 };
 
 const createBooking = async(req, res) => {
-    const { slot, title, description, meeting_link, session_date } = req.body
+    const { slot, title, description, session_date } = req.body
+
+    console.log(req.body)
 
     try {
+        const codingSlot = await Slot.findById({ "_id": slot })
+        if(!codingSlot) return res.status(404).send({ error: "The slot your are trying to book doesn't exist!" })
         const booking = new Booking({
             creator: req.user.id,
             title: title,
             slot: slot,
             description: description,
-            meeting_link: meeting_link,
+            meeting_link: codingSlot.meeting_link,
             session_date: session_date
         });
         await booking.save()
+
+        if (!booking) return res.status(400).send({ error: "Something went wrong, booking could not be created!!" })
+        codingSlot.booking_status = "booked"
+        await codingSlot.save()
 
         if(!booking) return res.status(400).send({ error: "Booking could not be created" })
         res.send({ booking }).status(201)

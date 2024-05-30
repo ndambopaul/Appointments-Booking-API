@@ -14,6 +14,7 @@ const SlotSchema = new mongoose.Schema({
         type: String,
         enum: ["9:00 AM", "5:00 PM", "10:00 PM"]
     },
+    meeting_link: String,
     booking_status: {
         type: String,
         enum: ["available", "booked"],

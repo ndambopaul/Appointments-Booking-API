@@ -13,6 +13,7 @@ const createSlot = async(req, res) => {
             day_name: body.day_name,
             start_time: body.start_time,
             end_time: body.end_time,
+            meeting_link: body.meeting_link,
             booking_status: "available"
         });
         await slot.save()
