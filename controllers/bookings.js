@@ -14,7 +14,9 @@ const createBooking = async(req, res) => {
     try {
         const codingSlot = await Slot.findById({ "_id": slot })
         if(!codingSlot) return res.status(404).send({ error: "The slot your are trying to book doesn't exist!" })
-        const booking = new Booking({
+        codingSlot.booking_status = "booked"
+        await codingSlot.save()
+            const booking = new Booking({
             creator: req.user.id,
             title: title,
             slot: slot,
@@ -25,8 +27,7 @@ const createBooking = async(req, res) => {
         await booking.save()
 
         if (!booking) return res.status(400).send({ error: "Something went wrong, booking could not be created!!" })
-        codingSlot.booking_status = "booked"
-        await codingSlot.save()
+        
 
         if(!booking) return res.status(400).send({ error: "Booking could not be created" })
         res.send({ booking }).status(201)
