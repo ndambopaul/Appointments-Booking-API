@@ -22,6 +22,7 @@ const authRoutes = require("./routes/auth");
 const slotRoutes = require("./routes/slots");
 const bookingRoutes = require("./routes/bookings");
 const sessionRoutes = require("./routes/sessions");
+const studentRoutes = require("./routes/students");
 
 app.get("/", (req, res) => {
     res.send({ message: "Server is running" }).status(200)
@@ -32,6 +33,7 @@ app.use("/auth", authRoutes);
 app.use("/slots", verifyToken, slotRoutes);
 app.use("/bookings", verifyToken, bookingRoutes);
 app.use("/sessions", verifyToken, sessionRoutes);
+app.use("/student-sessions", verifyToken, studentRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on: http://127.0.0.1:${PORT}`)

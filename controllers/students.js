@@ -1,14 +1,11 @@
-const StudentsSchema = new mongoose.Schema({
-    booking: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Booking"
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    }
-});
+const Student = require("../models/students");
+
+const getStudentSessions = async(req, res) => {
+    const sessions = await Student.find({ "user": req.user.id });
+
+    res.send(sessions).status(200)
+}
+
+module.exports = {
+    getStudentSessions
+}
