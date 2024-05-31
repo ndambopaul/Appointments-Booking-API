@@ -32,9 +32,11 @@ const joinSession = async(req, res) => {
 
 const leaveSession = async(req, res) => {
     try {
-        const session = await Student.findByIdAndDelete(req.params.id);
+        console.log({ id: req.params.id })
+        const session = await Student.findOne({"booking": req.params.id});
         if(!session) return res.status(404).send({ error: "You cannot leave a session which you didn't join!!" });
-        res.send({ session }).status(200)
+        await session.deleteOne()
+        res.send({ message: `Session record with id: ${req.params.id} has been removed` }).status(200)
     } catch (error) {
         console.log({ error: error.message });
         return res.status(500).send({ error: error.message });
