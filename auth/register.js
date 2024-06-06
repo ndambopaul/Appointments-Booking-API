@@ -4,6 +4,8 @@ const User = require("../models/users");
 const register = async(req, res) => {
     const data = req.body
 
+    console.log(data)
+
     try {
         const existingUser = await User.findOne({ "email": data.email });
         if(existingUser) return res.status(400).send({ error: `User with email: ${data.email} already exists!` })

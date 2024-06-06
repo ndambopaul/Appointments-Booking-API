@@ -1,7 +1,7 @@
 const Slot = require("../models/slots");
 
 const getSlots = async(req, res) => {
-    const slots = await Slot.find({})
+    const slots = await Slot.find({}).populate("creator")
     res.send({ count: slots.length, records: slots }).status(200)
 };
 
@@ -30,7 +30,7 @@ const getSlotById = async(req, res) => {
     const { id } = req.params
 
     try {
-        const slot = await Slot.findById({ "_id": id })
+        const slot = await Slot.findById({ "_id": id }).populate("creator")
         if(!slot) return res.status(404).send({ error: `Slot with id: ${id} not found` })
         res.send({ slot }).status(200)
     } catch (error) {

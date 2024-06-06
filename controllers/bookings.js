@@ -1,8 +1,9 @@
 const Booking = require("../models/bookings");
 const Slot = require("../models/slots");
+const Student = require("../models/students");
 
 const getBookings = async(req, res) => {
-    const bookings = await Booking.find({}).populate("creator")
+    const bookings = await Booking.find({}).populate("creator").populate("slot")
     res.send({count: bookings.length, records: bookings})
 };
 
@@ -25,11 +26,15 @@ const createBooking = async(req, res) => {
             session_date: session_date
         });
         await booking.save()
-
         if (!booking) return res.status(400).send({ error: "Something went wrong, booking could not be created!!" })
         
-
-        if(!booking) return res.status(400).send({ error: "Booking could not be created" })
+        // Adding the creator as one of the people on the participants list
+        const sessionData = {
+            user: req.user.id,
+            booking: booking._id
+        }
+        const session = await Student.create(sessionData)
+        if(!session) return res.status(400).send({ error: "Person booking the session could not be added to the session" })
         res.send({ booking }).status(201)
     } catch (error) {
         console.log({ error: error.message });
@@ -41,7 +46,7 @@ const getBookingById = async(req, res) => {
     const { id } = req.params
 
     try {
-        const booking = await Booking.findById({"_id": id})
+        const booking = await Booking.findById({"_id": id}).populate("creator")
         if(!booking) return res.status(404).send({ error: `Booking with id: ${id} not found` })
         res.send(booking).status(200)
     } catch (error) {
